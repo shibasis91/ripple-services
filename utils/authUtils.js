@@ -10,10 +10,22 @@ const hashOtp = async (otp) => {
 const generateOtp = async () => await otpGen();
 
 const generateAuthToken = async (phone) => {
-  const SECRET_KEY = process.env.SECRET_KEY;
-  return await jwt.sign({ phone }, SECRET_KEY, {
-    expiresIn: "1h",
+  const secretKey = process.env.JWT_ACCESS_SECRET_KEY;
+  return await jwt.sign({ phone }, secretKey, {
+    expiresIn: "15m",
   });
 };
 
-module.exports = { hashOtp, generateOtp, generateAuthToken };
+const generateRefreshToken = async (phone) => {
+  const secretKey = process.env.JWT_REFRESH_SECRET_KEY;
+  return await jwt.sign({ phone }, secretKey, {
+    expiresIn: "15d",
+  });
+};
+
+module.exports = {
+  hashOtp,
+  generateOtp,
+  generateAuthToken,
+  generateRefreshToken,
+};

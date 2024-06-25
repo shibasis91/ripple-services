@@ -8,12 +8,17 @@ const authenticateToken = async (req, res, next) => {
       .status(401)
       .json({ status: "error", message: "Unauthorized request" });
   }
-  const secretKey = process.env.SECRET_KEY;
+  const secretKey = process.env.JWT_ACCESS_SECRET_KEY;
   jwt.verify(token, secretKey, (err, user) => {
     if (err) {
+      if (err.name === "TokenExpiredError") {
+        return res
+          .status(401)
+          .json({ status: "error", message: "Expired token" });
+      }
       return res
         .status(403)
-        .json({ status: "error", message: "Invalid or expired token" });
+        .json({ status: "error", message: "Invalid token" });
     }
     req.body.user = user;
     next();

@@ -1,14 +1,8 @@
 const express = require("express");
-const {
-  validateUser,
-  authenticateUser,
-  updateUserDetails,
-} = require("../controllers/userController");
-const authenticateToken = require("../middleware/authMiddleware");
-const userRoutes = express.Router();
+const { updateUserDetails } = require("../controllers/userController");
 
-userRoutes.post("/", validateUser);
-userRoutes.post("/auth", authenticateUser);
-userRoutes.put("/update", authenticateToken, updateUserDetails);
+const userRoute = express.Router();
 
-module.exports = userRoutes;
+userRoute.put("/update", updateUserDetails);
+
+module.exports = userRoute;
